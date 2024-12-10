@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lab.mapper.PaperMapper">
+    <insert id="paperAdd">
+        insert into paper (title, keyword, abstractText, authorAll, publishName, field, type, urlLink, submitTime, acceptanceTime, downloadLink, citedNumber)
+            value(#{name}, #{keyword}, #{abstractText},   #{authorAll}, #{publishName}, #{fieldValue},#{typeValue}, #{urlLink}, #{submitTime}, #{acceptanceTime}, #{downloadLink}, #{num})
+    </insert>
+    <update id="paperUpdate">
+        UPDATE paper
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="keyword != null">keyword = #{keyword},</if>
+            <if test="abstractText != null">abstractText = #{abstractText},</if>
+            <if test="authorAll != null">authorAll = #{authorAll},</if>
+            <if test="publishName != null">publishName = #{publishName},</if>
+            <if test="submitTime != null">submitTime = #{submitTime,jdbcType=TIMESTAMP},</if>
+            <if test="acceptanceTime != null">acceptanceTime = #{acceptanceTime,jdbcType=TIMESTAMP},</if>
+            <if test="field != null">field = #{field},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="citedNumber != null">citedNumber = #{citedNumber},</if>
+            <if test="urlLink != null">urlLink = #{urlLink},</if>
+            <if test="downloadLink != null">downloadLink = #{downloadLink},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="pageQuery" resultType="com.lab.vo.PaperVo">
+        select * from paper
+        <where>
+            <!-- 论文标题筛选 -->
+            <if test="title != null and title != ''">
+                and title like concat('%', #{title}, '%')
+            </if>
+            <!-- 作者姓名筛选 -->
+            <if test="authorAll != null and authorAll != ''">
+                and author_all like concat('%', #{authorAll}, '%')
+            </if>
+            <!-- 论文领域筛选 -->
+            <if test="field != null and field != ''">
+                and field = #{field}
+            </if>
+            <!-- 论文类型筛选 -->
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <!-- 接收时间范围筛选 -->
+            <if test="startTime != null and endTime != null">
+                and acceptanceTime BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="startTime != null and endTime = null">
+                and acceptanceTime &gt;= #{startTime}
+            </if>
+            <if test="startTime = null and endTime != null">
+                and acceptanceTime &lt;=#{endTime}
+            </if>
+        </where>
+        <!-- 按接收时间排序 -->
+#         order by acceptance_time desc
+    </select>
+</mapper>

@@ -1,0 +1,14 @@
+lab:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: lab_admin
+    username: root
+    password: #自己的数据库以及密码的设置
+  alioss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id:  #自己的阿里云相关内容
+    access-key-secret:
+    bucket-name: 
+
